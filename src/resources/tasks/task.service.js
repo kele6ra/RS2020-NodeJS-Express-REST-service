@@ -12,7 +12,7 @@ const addTask = async (taskData, boardId) => {
     return { code: 400 };
   }
   const { error } = await tasksRepo.addTask(task.get());
-  return error ? { code: 400 } : { code: 200, task: task.toResponce() };
+  return error ? { code: 400 } : { code: 200, task: task.get() };
 };
 
 const deleteBoardTasks = async boardId =>
@@ -27,14 +27,14 @@ const getBoardTasks = async boardId => {
   const { error, tasks } = await tasksRepo.getBoardTasks(boardId);
   return error
     ? { code: 400 }
-    : { code: 200, tasks: tasks.map(e => new Task(e).toResponce()) };
+    : { code: 200, tasks: tasks.map(e => new Task(e).get()) };
 };
 
 const getTask = async (boardId, taskId) => {
   const { error, task } = await tasksRepo.getTask(boardId, taskId);
   return error
     ? { code: error === 1 ? 404 : 400 }
-    : { code: 200, task: new Task(task).toResponce() };
+    : { code: 200, task: new Task(task).get() };
 };
 
 const unassignUserTasks = async userId =>
@@ -55,7 +55,7 @@ const updateTask = async (boardId, taskId, taskData) => {
   const result = await tasksRepo.updateTask(boardId, editedTask.get());
   return result.error
     ? { code: result.error === 1 ? 404 : 400 }
-    : { code: 200, task: editedTask.toResponce() };
+    : { code: 200, task: editedTask.get() };
 };
 
 module.exports = {
