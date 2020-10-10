@@ -50,7 +50,9 @@
     "express": "4.17.1",
     "swagger-ui-express": "4.1.2",
     "uuid": "3.3.3",
-    "yamljs": "0.3.0"
+    "yamljs": "0.3.0",
+    "password-generator": "^2.3.2",
+    "username-generator": "^1.1.0"
   },
   "devDependencies": {
     "eslint": "6.7.2",
