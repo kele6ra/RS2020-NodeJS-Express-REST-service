@@ -1,8 +1,9 @@
 const winston = require('../utils/winston');
 const notFoundError = require('./404');
+const badRequestError = require('./400');
 
 const handle = (err, req, res, next) => {
-  if (err instanceof notFoundError) {
+  if (err instanceof notFoundError || err instanceof badRequestError) {
     winston.error(`Сode ${err.status}: ${err.shortMsg}`);
     res.status(err.status).send({ error: err.shortMsg });
   } else if (err) {
