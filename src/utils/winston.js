@@ -58,6 +58,16 @@ const logger = winston.createLogger({
   exitOnError: false
 });
 
+logger.url = (req, res, next) => {
+  logger.info(
+    `method: ${req.method} url: ${req.protocol}://${req.headers.host}${
+      req.originalUrl
+    }  query: ${JSON.stringify(req.params)} body: ${JSON.stringify(req.body)}`
+  );
+
+  next();
+};
+
 logger.finish = exitCode => {
   /* eslint-disable-next-line */
   transport.on('finish', () => process.exit(exitCode));

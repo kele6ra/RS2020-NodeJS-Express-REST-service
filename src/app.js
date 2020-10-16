@@ -6,14 +6,15 @@ const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
 const taskRouter = require('./resources/tasks/task.router');
 const errorHandler = require('./errors/handler');
-const morgan = require('./utils/morgan');
+// const morgan = require('./utils/morgan');
+const logger = require('./utils/winston');
 
 const app = express();
 
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
-app.use(morgan);
 app.use(express.json());
+app.use(logger.url);
 
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 

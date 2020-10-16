@@ -1,13 +1,13 @@
-const winston = require('../utils/winston');
+const logger = require('../utils/winston');
 const notFoundError = require('./404');
 const badRequestError = require('./400');
 
 const handle = (err, req, res, next) => {
   if (err instanceof notFoundError || err instanceof badRequestError) {
-    winston.error(`Сode ${err.status}: ${err.shortMsg}`);
+    logger.error(`Сode ${err.status}: ${err.shortMsg}`);
     res.status(err.status).send({ error: err.shortMsg });
   } else if (err) {
-    winston.error(`Internal Server Error: ${err.stack || err.message}`);
+    logger.error(`Internal Server Error: ${err.stack || err.message}`);
     res.sendStatus(500);
   }
 
@@ -15,13 +15,13 @@ const handle = (err, req, res, next) => {
 };
 
 process.on('uncaughtException', err => {
-  winston.error(`Uncaught exception: ${err.stack || err.message}`);
-  winston.info('Shutting down');
-  winston.finish(1);
+  logger.error(`Uncaught exception: ${err.stack || err.message}`);
+  logger.info('Shutting down');
+  logger.finish(1);
 });
 
 process.on('unhandledRejection', (err, p) => {
-  winston.error(
+  logger.error(
     `Unhandled exception: ${err.stack || err.message} at Promise ${p}`
   );
 });

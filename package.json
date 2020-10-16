@@ -48,7 +48,6 @@
     "cross-env": "6.0.3",
     "dotenv": "8.2.0",
     "express": "4.17.1",
-    "morgan": "^1.10.0",
     "password-generator": "^2.3.2",
     "swagger-ui-express": "4.1.2",
     "username-generator": "^1.1.0",
