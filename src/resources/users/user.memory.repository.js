@@ -1,62 +1,38 @@
+const NOT_FOUND_ERROR = require('../../errors/404');
 const users = [];
 
-const addUser = async user => {
-  try {
-    users.push(user);
-    return { error: 0 };
-  } catch (error) {
-    console.error(error);
-    return { error: 255 };
-  }
+const addUser = user => {
+  users.push(user);
+  return user;
 };
 
-const deleteUser = async userId => {
-  try {
-    const userIndex = users.findIndex(e => e.id === userId);
-    if (userIndex >= 0) {
-      users.splice(userIndex, 1);
-      return { error: 0 };
-    }
-    return { error: 1 };
-  } catch (error) {
-    console.error(error);
-    return { error: 255 };
+const deleteUser = userId => {
+  const userIndex = users.findIndex(e => e.id === userId);
+  if (userIndex === -1) {
+    throw new NOT_FOUND_ERROR(`Couldn't find user with id: ${userId}`);
   }
+  users.splice(userIndex, 1);
 };
 
-const getAll = async () => {
-  try {
-    return { error: 0, users };
-  } catch (error) {
-    console.error(error);
-    return { error: 255 };
-  }
+const getAll = () => {
+  return users.filter(e => e);
 };
 
-const getUser = async userId => {
-  try {
-    const userIndex = users.findIndex(e => e.id === userId);
-    return userIndex === -1
-      ? { error: 1 }
-      : { error: 0, user: users[userIndex] };
-  } catch (error) {
-    console.error(error);
-    return { error: 255 };
+const getUser = userId => {
+  const userIndex = users.findIndex(e => e.id === userId);
+  if (userIndex === -1) {
+    throw new NOT_FOUND_ERROR(`Couldn't find user with id: ${userId}`);
   }
+  return users[userIndex];
 };
 
-const updateUser = async user => {
-  try {
-    const userIndex = users.findIndex(e => e.id === user.id);
-    if (userIndex >= 0) {
-      users[userIndex] = user;
-      return { error: 0 };
-    }
-    return { error: 1 };
-  } catch (error) {
-    console.error(error);
-    return { error: 255 };
+const updateUser = user => {
+  const userIndex = users.findIndex(e => e.id === user.id);
+  if (userIndex === -1) {
+    throw new NOT_FOUND_ERROR(`Couldn't find user with id: ${user.id}`);
   }
+  users[userIndex] = user;
+  return user;
 };
 
 module.exports = { addUser, deleteUser, getAll, getUser, updateUser };

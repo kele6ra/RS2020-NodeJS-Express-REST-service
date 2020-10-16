@@ -1,50 +1,47 @@
-const router = require('express').Router();
+const router = require('express').Router({ mergeParams: true });
 const tasksService = require('./task.service');
+const wrapAsync = require('../../utils/wrapAsync');
 
-router
-  .route('/:boardId/tasks')
-  .get(async (req, res) => {
-    const { tasks, code } = await tasksService.getBoardTasks(
-      req.params.boardId
-    );
-    if (code === 200) res.json(tasks);
-    else res.status(code).end();
+router.route('/').get(
+  wrapAsync(async (req, res) => {
+    const tasks = await tasksService.getBoardTasks(req.params.boardId);
+    res.send(tasks);
   })
-  .post(async (req, res) => {
-    const { task, code } = await tasksService.addTask(
-      req.body,
-      req.params.boardId
-    );
-    if (code === 200) res.json(task);
-    else res.status(code).end();
-  });
+);
 
-router
-  .route('/:boardId/tasks/:taskId')
-  .get(async (req, res) => {
-    const { task, code } = await tasksService.getTask(
+router.route('/').post(
+  wrapAsync(async (req, res) => {
+    const task = await tasksService.addTask(req.body, req.params.boardId);
+    res.send(task);
+  })
+);
+
+router.route('/:taskId').get(
+  wrapAsync(async (req, res) => {
+    const task = await tasksService.getTask(
       req.params.boardId,
       req.params.taskId
     );
-    if (code === 200) res.json(task);
-    else res.status(code).end();
+    res.send(task);
   })
-  .delete(async (req, res) => {
-    const { code } = await tasksService.deleteTask(
-      req.params.boardId,
-      req.params.taskId
-    );
-    if (code === 204) res.end();
-    else res.status(code).end();
+);
+
+router.route('/:taskId').delete(
+  wrapAsync(async (req, res) => {
+    await tasksService.deleteTask(req.params.boardId, req.params.taskId);
+    res.sendStatus(204);
   })
-  .put(async (req, res) => {
-    const { task, code } = await tasksService.updateTask(
+);
+
+router.route('/:taskId').put(
+  wrapAsync(async (req, res) => {
+    const task = await tasksService.updateTask(
       req.params.boardId,
       req.params.taskId,
       req.body
     );
-    if (code === 200) res.json(task);
-    else res.status(code).end();
-  });
+    res.send(task);
+  })
+);
 
 module.exports = router;

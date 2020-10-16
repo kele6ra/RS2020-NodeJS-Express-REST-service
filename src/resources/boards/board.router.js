@@ -1,38 +1,40 @@
 const router = require('express').Router();
 const boardsService = require('./board.service');
+const wrapAsync = require('../../utils/wrapAsync');
 
-router
-  .route('/')
-  .get(async (req, res) => {
-    const { boards, code } = await boardsService.getAll();
-    if (code === 200) res.json(boards);
-    else res.status(code).end();
+router.route('/').get(
+  wrapAsync(async (req, res) => {
+    const boards = await boardsService.getAll();
+    res.send(boards);
   })
-  .post(async (req, res) => {
-    const { board, code } = await boardsService.addBoard(req.body);
-    if (code === 200) res.json(board);
-    else res.status(code).end();
-  });
+);
 
-router
-  .route('/:boardId')
-  .get(async (req, res) => {
-    const { board, code } = await boardsService.getBoard(req.params.boardId);
-    if (code === 200) res.json(board);
-    else res.status(code).end();
+router.route('/').post(
+  wrapAsync(async (req, res) => {
+    const board = await boardsService.addBoard(req.body);
+    res.send(board);
   })
-  .delete(async (req, res) => {
-    const { code } = await boardsService.deleteBoard(req.params.boardId);
-    if (code === 204) res.end();
-    else res.status(code).end();
+);
+
+router.route('/:boardId').get(
+  wrapAsync(async (req, res) => {
+    const board = await boardsService.getBoard(req.params.boardId);
+    res.send(board);
   })
-  .put(async (req, res) => {
-    const { code, board } = await boardsService.updateBoard(
-      req.params.boardId,
-      req.body
-    );
-    if (code === 200) res.json(board);
-    else res.status(code).end();
-  });
+);
+
+router.route('/:boardId').delete(
+  wrapAsync(async (req, res) => {
+    await boardsService.deleteBoard(req.params.boardId);
+    res.sendStatus(204);
+  })
+);
+
+router.route('/:boardId').put(
+  wrapAsync(async (req, res) => {
+    const board = await boardsService.updateBoard(req.params.boardId, req.body);
+    res.send(board);
+  })
+);
 
 module.exports = router;

@@ -1,38 +1,40 @@
 const router = require('express').Router();
 const usersService = require('./user.service');
+const wrapAsync = require('../../utils/wrapAsync');
 
-router
-  .route('/')
-  .get(async (req, res) => {
-    const { code, users } = await usersService.getAll();
-    if (code === 200) res.json(users);
-    else res.status(code).end();
+router.route('/').get(
+  wrapAsync(async (req, res) => {
+    const users = await usersService.getAll();
+    res.send(users);
   })
-  .post(async (req, res) => {
-    const { code, user } = await usersService.addUser(req.body);
-    if (code === 200) res.json(user);
-    else res.status(code).end();
-  });
+);
 
-router
-  .route('/:userId')
-  .get(async (req, res) => {
-    const { code, user } = await usersService.getUser(req.params.userId);
-    if (code === 200) res.json(user);
-    else res.status(code).end();
+router.route('/').post(
+  wrapAsync(async (req, res) => {
+    const user = await usersService.addUser(req.body);
+    res.send(user);
   })
-  .delete(async (req, res) => {
-    const { code } = await usersService.deleteUser(req.params.userId);
-    if (code === 204) res.end();
-    else res.status(code).end();
+);
+
+router.route('/:userId').get(
+  wrapAsync(async (req, res) => {
+    const user = await usersService.getUser(req.params.userId);
+    res.send(user);
   })
-  .put(async (req, res) => {
-    const { code, user } = await usersService.updateUser(
-      req.body,
-      req.params.userId
-    );
-    if (code === 200) res.json(user);
-    else res.status(code).end();
-  });
+);
+
+router.route('/:userId').delete(
+  wrapAsync(async (req, res) => {
+    await usersService.deleteUser(req.params.userId);
+    res.sendStatus(204);
+  })
+);
+
+router.route('/:userId').put(
+  wrapAsync(async (req, res) => {
+    const user = await usersService.updateUser(req.body, req.params.userId);
+    res.send(user);
+  })
+);
 
 module.exports = router;

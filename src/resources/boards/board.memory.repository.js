@@ -1,62 +1,38 @@
+const NOT_FOUND_ERROR = require('../../errors/404');
 const boards = [];
 
-const addBoard = async board => {
-  try {
-    boards.push(board);
-    return { error: 0 };
-  } catch (error) {
-    console.error(error);
-    return { error: 255 };
-  }
+const addBoard = board => {
+  boards.push(board);
+  return board;
 };
 
-const deleteBoard = async boardId => {
-  try {
-    const boardIndex = boards.findIndex(e => e.id === boardId);
-    if (boardIndex >= 0) {
-      boards.splice(boardIndex, 1);
-      return { error: 0 };
-    }
-    return { error: 1 };
-  } catch (error) {
-    console.error(error);
-    return { error: 255 };
+const deleteBoard = boardId => {
+  const boardIndex = boards.findIndex(e => e.id === boardId);
+  if (boardIndex === -1) {
+    throw new NOT_FOUND_ERROR(`Couldn't find a board with id: ${boardId}`);
   }
+  boards.splice(boardIndex, 1);
 };
 
-const getAll = async () => {
-  try {
-    return { error: 0, boards };
-  } catch (error) {
-    console.error(error);
-    return { error: 255 };
-  }
+const getAll = () => {
+  return boards.filter(e => e);
 };
 
-const getBoard = async boardId => {
-  try {
-    const boardIndex = boards.findIndex(e => e.id === boardId);
-    return boardIndex === -1
-      ? { error: 1 }
-      : { error: 0, board: boards[boardIndex] };
-  } catch (error) {
-    console.error(error);
-    return { error: 255 };
+const getBoard = boardId => {
+  const boardIndex = boards.findIndex(e => e.id === boardId);
+  if (boardIndex === -1) {
+    throw new NOT_FOUND_ERROR(`Couldn't find a board with id: ${boardId}`);
   }
+  return boards[boardIndex];
 };
 
-const updateBoard = async board => {
-  try {
-    const boardIndex = boards.findIndex(e => e.id === board.id);
-    if (boardIndex >= 0) {
-      boards[boardIndex] = board;
-      return { error: 0 };
-    }
-    return { error: 1 };
-  } catch (error) {
-    console.error(error);
-    return { error: 255 };
+const updateBoard = board => {
+  const boardIndex = boards.findIndex(e => e.id === board.id);
+  if (boardIndex === -1) {
+    throw new NOT_FOUND_ERROR(`Couldn't find a board with id: ${board.id}`);
   }
+  boards[boardIndex] = board;
+  return board;
 };
 
 module.exports = { addBoard, deleteBoard, getAll, getBoard, updateBoard };
