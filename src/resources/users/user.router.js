@@ -6,21 +6,21 @@ const wrapAsync = require('../../utils/wrapAsync');
 router.route('/').get(
   wrapAsync(async (req, res) => {
     const users = await usersService.getAll();
-    res.send(users.map(User.toResponce));
+    res.send(users.map(User.getResponse));
   })
 );
 
 router.route('/').post(
   wrapAsync(async (req, res) => {
     const user = await usersService.addUser(req.body);
-    res.send(User.toResponce(user));
+    res.send(User.getResponse(user));
   })
 );
 
 router.route('/:userId').get(
   wrapAsync(async (req, res) => {
     const user = await usersService.getUser(req.params.userId);
-    res.send(User.toResponce(user));
+    res.send(User.getResponse(user));
   })
 );
 
@@ -34,7 +34,7 @@ router.route('/:userId').delete(
 router.route('/:userId').put(
   wrapAsync(async (req, res) => {
     const user = await usersService.updateUser(req.body, req.params.userId);
-    res.send(User.toResponce(user));
+    res.send(User.getResponse(user));
   })
 );
 

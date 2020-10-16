@@ -30,7 +30,7 @@ class User {
     this.password = typeof password === 'undefined' ? this.password : password;
   }
 
-  static toResponse(user) {
+  static getResponse(user) {
     const { id, name, login } = user;
     return { id, name, login };
   }
