@@ -41,14 +41,9 @@ class Task {
     };
   }
 
-  toResponce() {
-    return {
-      id: this.id,
-      title: this.title,
-      order: this.order,
-      description: this.description,
-      userId: this.userId
-    };
+  static toResponce(task) {
+    const { id, title, order, description, userId } = task;
+    return { id, title, order, description, userId };
   }
 }
 

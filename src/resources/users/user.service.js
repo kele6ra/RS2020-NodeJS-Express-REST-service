@@ -5,19 +5,14 @@ const User = require('./user.model');
 const addUser = userData => {
   const user = new User(userData);
   // if (typeof user.name === 'undefined') return { code: 400 };
-  usersRepo.addUser(user.get());
-  return user.toResponce();
+  return usersRepo.addUser(user.get());
 };
 
 const getAll = () => {
-  const users = usersRepo.getAll();
-  return users.map(e => new User(e).toResponce());
+  return usersRepo.getAll();
 };
 
-const getUser = userId => {
-  const user = usersRepo.getUser(userId);
-  return User.toResponce(user);
-};
+const getUser = userId => usersRepo.getUser(userId);
 
 const deleteUser = userId => {
   usersRepo.deleteUser(userId);

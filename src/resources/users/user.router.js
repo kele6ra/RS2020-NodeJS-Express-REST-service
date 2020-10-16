@@ -1,25 +1,26 @@
 const router = require('express').Router();
+const User = require('./user.model');
 const usersService = require('./user.service');
 const wrapAsync = require('../../utils/wrapAsync');
 
 router.route('/').get(
   wrapAsync(async (req, res) => {
     const users = await usersService.getAll();
-    res.send(users);
+    res.send(users.map(User.toResponce));
   })
 );
 
 router.route('/').post(
   wrapAsync(async (req, res) => {
     const user = await usersService.addUser(req.body);
-    res.send(user);
+    res.send(User.toResponce(user));
   })
 );
 
 router.route('/:userId').get(
   wrapAsync(async (req, res) => {
     const user = await usersService.getUser(req.params.userId);
-    res.send(user);
+    res.send(User.toResponce(user));
   })
 );
 
@@ -33,7 +34,7 @@ router.route('/:userId').delete(
 router.route('/:userId').put(
   wrapAsync(async (req, res) => {
     const user = await usersService.updateUser(req.body, req.params.userId);
-    res.send(user);
+    res.send(User.toResponce(user));
   })
 );
 
