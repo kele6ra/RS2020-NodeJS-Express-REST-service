@@ -61,6 +61,7 @@ const logger = winston.createLogger({
 
 logger.url = (req, res, next) => {
   const { method, protocol, originalUrl, params, body } = req;
+  if (body.password) body.password = '******';
   const host = req.headers.host;
   const start = Date.now();
   onFinished(res, () => {
