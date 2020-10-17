@@ -1,4 +1,5 @@
 const winston = require('winston');
+const onFinished = require('on-finished');
 require('winston-daily-rotate-file');
 
 const transport = new winston.transports.DailyRotateFile({
@@ -59,11 +60,18 @@ const logger = winston.createLogger({
 });
 
 logger.url = (req, res, next) => {
-  logger.info(
-    `method: ${req.method} url: ${req.protocol}://${req.headers.host}${
-      req.originalUrl
-    }  query: ${JSON.stringify(req.params)} body: ${JSON.stringify(req.body)}`
-  );
+  const { method, protocol, originalUrl, params, body } = req;
+  const host = req.headers.host;
+  const start = Date.now();
+  onFinished(res, () => {
+    const ms = Date.now() - start;
+    const { statusCode } = res;
+    logger.info(
+      `method: ${method} url: ${protocol}://${host}${originalUrl}  query: ${JSON.stringify(
+        params
+      )} body: ${JSON.stringify(body)} code: ${statusCode} [${ms} ms]`
+    );
+  });
 
   next();
 };
