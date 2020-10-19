@@ -24,6 +24,8 @@ process.on('unhandledRejection', (err, p) => {
   logger.error(
     `Unhandled exception: ${err.stack || err.message} at Promise ${p}`
   );
+  logger.info('Shutting down');
+  logger.finish(1);
 });
 
 module.exports = handle;
