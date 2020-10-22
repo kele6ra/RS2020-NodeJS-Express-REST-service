@@ -2,7 +2,7 @@ const router = require('express').Router({ mergeParams: true });
 const { OK, NO_CONTENT } = require('http-status-codes');
 const tasksService = require('./task.service');
 const wrapAsync = require('../../utils/wrapAsync');
-const { taskId } = require('../../utils/validation/shemas');
+const { taskId, taskBody } = require('../../utils/validation/shemas');
 const validator = require('../../utils/validation/validator');
 
 router.get(
@@ -15,6 +15,7 @@ router.get(
 
 router.post(
   '/',
+  validator(taskBody, 'body'),
   wrapAsync(async (req, res) => {
     const task = await tasksService.addTask(req.body, req.params.id);
     res.status(OK).send(task);
@@ -42,6 +43,7 @@ router.delete(
 router.put(
   '/:taskId',
   validator(taskId, 'params'),
+  validator(taskBody, 'body'),
   wrapAsync(async (req, res) => {
     const task = await tasksService.updateTask(
       req.params.id,

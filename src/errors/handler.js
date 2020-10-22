@@ -3,6 +3,7 @@ const logger = require('../common/logging');
 
 const handle = (err, req, res, next) => {
   if (err.status) {
+    logger.error(`${err.status}: ${err.message}`);
     res.status(err.status).send(err.message);
   } else {
     logger.error(err.message);

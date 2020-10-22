@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { OK, NO_CONTENT } = require('http-status-codes');
 const boardsService = require('./board.service');
 const wrapAsync = require('../../utils/wrapAsync');
-const { id } = require('../../utils/validation/shemas');
+const { id, boardBody } = require('../../utils/validation/shemas');
 const validator = require('../../utils/validation/validator');
 
 router.get(
@@ -15,6 +15,7 @@ router.get(
 
 router.post(
   '/',
+  validator(boardBody, 'body'),
   wrapAsync(async (req, res) => {
     const board = await boardsService.addBoard(req.body);
     res.status(OK).json(board);
@@ -33,6 +34,7 @@ router.get(
 router.put(
   '/:id',
   validator(id, 'params'),
+  validator(boardBody, 'body'),
   wrapAsync(async (req, res) => {
     const board = await boardsService.updateBoard(req.params.id, req.body);
     res.status(OK).json(board);

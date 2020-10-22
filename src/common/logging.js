@@ -66,6 +66,7 @@ if (NODE_ENV === 'development') {
   logger.add(
     new winston.transports.Console({
       format: winston.format.simple(),
+      level: 'info',
       handleExceptions: true,
       handleRejections: true,
       colorize: true
