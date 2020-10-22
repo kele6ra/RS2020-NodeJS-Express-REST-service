@@ -1,4 +1,4 @@
-const tasksRepo = require('./task.memory.repository');
+const tasksRepo = require('./task.mongo.repository');
 const Task = require('./task.model');
 const BAD_REQUEST_ERROR = require('../../errors/400');
 

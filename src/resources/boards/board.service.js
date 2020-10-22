@@ -1,5 +1,5 @@
 const Board = require('./board.model');
-const boardsRepo = require('./board.memory.repository');
+const boardsRepo = require('./board.mongo.repository');
 const tasksService = require('../tasks/task.service');
 const BAD_REQUEST_ERROR = require('../../errors/400');
 

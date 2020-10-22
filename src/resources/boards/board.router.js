@@ -1,39 +1,50 @@
 const router = require('express').Router();
+const { OK, NO_CONTENT } = require('http-status-codes');
 const boardsService = require('./board.service');
 const wrapAsync = require('../../utils/wrapAsync');
+const { id } = require('../../utils/validation/shemas');
+const validator = require('../../utils/validation/validator');
 
-router.route('/').get(
+router.get(
+  '/',
   wrapAsync(async (req, res) => {
     const boards = await boardsService.getAll();
-    res.send(boards);
+    res.status(OK).json(boards);
   })
 );
 
-router.route('/').post(
+router.post(
+  '/',
   wrapAsync(async (req, res) => {
     const board = await boardsService.addBoard(req.body);
-    res.send(board);
+    res.status(OK).json(board);
   })
 );
 
-router.route('/:boardId').get(
+router.get(
+  '/:id',
+  validator(id, 'params'),
   wrapAsync(async (req, res) => {
-    const board = await boardsService.getBoard(req.params.boardId);
-    res.send(board);
+    const board = await boardsService.getBoard(req.params.id);
+    res.status(OK).json(board);
   })
 );
 
-router.route('/:boardId').delete(
+router.put(
+  '/:id',
+  validator(id, 'params'),
   wrapAsync(async (req, res) => {
-    await boardsService.deleteBoard(req.params.boardId);
-    res.sendStatus(204);
+    const board = await boardsService.updateBoard(req.params.id, req.body);
+    res.status(OK).json(board);
   })
 );
 
-router.route('/:boardId').put(
+router.delete(
+  '/:id',
+  validator(id, 'params'),
   wrapAsync(async (req, res) => {
-    const board = await boardsService.updateBoard(req.params.boardId, req.body);
-    res.send(board);
+    await boardsService.deleteBoard(req.params.id);
+    res.sendStatus(NO_CONTENT);
   })
 );
 

@@ -15,9 +15,7 @@ const deleteTask = (boardId, taskId) => {
     e => e.boardId === boardId && e.id === taskId
   );
   if (taskIndex === -1) {
-    throw new NOT_FOUND_ERROR(
-      `Couldn't find task with id: ${taskId} on board with id: ${boardId}`
-    );
+    throw new NOT_FOUND_ERROR('task on board', { taskId, boardId });
   }
   tasks.splice(taskIndex, 1);
 };
@@ -29,9 +27,7 @@ const getTask = async (boardId, taskId) => {
     e => e.boardId === boardId && e.id === taskId
   );
   if (taskIndex === -1) {
-    throw new NOT_FOUND_ERROR(
-      `Couldn't find task with id: ${taskId} on board with id: ${boardId}`
-    );
+    throw new NOT_FOUND_ERROR('task on board', { taskId, boardId });
   }
   return tasks[taskIndex];
 };
@@ -47,9 +43,7 @@ const updateTask = (boardId, task) => {
     e => e.boardId === boardId && e.id === task.id
   );
   if (taskIndex === -1) {
-    throw new NOT_FOUND_ERROR(
-      `Couldn't find task with id: ${task.id} on board with id: ${boardId}`
-    );
+    throw new NOT_FOUND_ERROR('task on board', { task: task.id, boardId });
   }
   tasks[taskIndex] = task;
   return task;

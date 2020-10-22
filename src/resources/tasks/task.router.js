@@ -1,46 +1,54 @@
 const router = require('express').Router({ mergeParams: true });
+const { OK, NO_CONTENT } = require('http-status-codes');
 const tasksService = require('./task.service');
 const wrapAsync = require('../../utils/wrapAsync');
+const { taskId } = require('../../utils/validation/shemas');
+const validator = require('../../utils/validation/validator');
 
-router.route('/').get(
+router.get(
+  '/',
   wrapAsync(async (req, res) => {
-    const tasks = await tasksService.getBoardTasks(req.params.boardId);
-    res.send(tasks);
+    const tasks = await tasksService.getBoardTasks(req.params.id);
+    await res.status(OK).json(tasks);
   })
 );
 
-router.route('/').post(
+router.post(
+  '/',
   wrapAsync(async (req, res) => {
-    const task = await tasksService.addTask(req.body, req.params.boardId);
-    res.send(task);
+    const task = await tasksService.addTask(req.body, req.params.id);
+    res.status(OK).send(task);
   })
 );
 
-router.route('/:taskId').get(
+router.get(
+  '/:taskId',
+  validator(taskId, 'params'),
   wrapAsync(async (req, res) => {
-    const task = await tasksService.getTask(
-      req.params.boardId,
-      req.params.taskId
-    );
-    res.send(task);
+    const task = await tasksService.getTask(req.params.id, req.params.taskId);
+    res.status(OK).send(task);
   })
 );
 
-router.route('/:taskId').delete(
+router.delete(
+  '/:taskId',
+  validator(taskId, 'params'),
   wrapAsync(async (req, res) => {
-    await tasksService.deleteTask(req.params.boardId, req.params.taskId);
-    res.sendStatus(204);
+    await tasksService.deleteTask(req.params.id, req.params.taskId);
+    res.sendStatus(NO_CONTENT);
   })
 );
 
-router.route('/:taskId').put(
+router.put(
+  '/:taskId',
+  validator(taskId, 'params'),
   wrapAsync(async (req, res) => {
     const task = await tasksService.updateTask(
-      req.params.boardId,
+      req.params.id,
       req.params.taskId,
       req.body
     );
-    res.send(task);
+    res.status(OK).send(task);
   })
 );
 

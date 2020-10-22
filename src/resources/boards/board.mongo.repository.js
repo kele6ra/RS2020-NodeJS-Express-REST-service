@@ -9,7 +9,7 @@ const addBoard = board => {
 const deleteBoard = boardId => {
   const boardIndex = boards.findIndex(e => e.id === boardId);
   if (boardIndex === -1) {
-    throw new NOT_FOUND_ERROR(`Couldn't find a board with id: ${boardId}`);
+    throw new NOT_FOUND_ERROR('board', { boardId });
   }
   boards.splice(boardIndex, 1);
 };
@@ -21,7 +21,7 @@ const getAll = () => {
 const getBoard = boardId => {
   const boardIndex = boards.findIndex(e => e.id === boardId);
   if (boardIndex === -1) {
-    throw new NOT_FOUND_ERROR(`Couldn't find a board with id: ${boardId}`);
+    throw new NOT_FOUND_ERROR('board', { boardId });
   }
   return boards[boardIndex];
 };
@@ -29,7 +29,7 @@ const getBoard = boardId => {
 const updateBoard = board => {
   const boardIndex = boards.findIndex(e => e.id === board.id);
   if (boardIndex === -1) {
-    throw new NOT_FOUND_ERROR(`Couldn't find a board with id: ${board.id}`);
+    throw new NOT_FOUND_ERROR('board', { board: board.id });
   }
   boards[boardIndex] = board;
   return board;

@@ -9,7 +9,7 @@ const addUser = user => {
 const deleteUser = userId => {
   const userIndex = users.findIndex(e => e.id === userId);
   if (userIndex === -1) {
-    throw new NOT_FOUND_ERROR(`Couldn't find user with id: ${userId}`);
+    throw new NOT_FOUND_ERROR('user', { userId });
   }
   users.splice(userIndex, 1);
 };
@@ -21,7 +21,7 @@ const getAll = () => {
 const getUser = userId => {
   const userIndex = users.findIndex(e => e.id === userId);
   if (userIndex === -1) {
-    throw new NOT_FOUND_ERROR(`Couldn't find user with id: ${userId}`);
+    throw new NOT_FOUND_ERROR('user', { userId });
   }
   return users[userIndex];
 };
@@ -29,7 +29,7 @@ const getUser = userId => {
 const updateUser = user => {
   const userIndex = users.findIndex(e => e.id === user.id);
   if (userIndex === -1) {
-    throw new NOT_FOUND_ERROR(`Couldn't find user with id: ${user.id}`);
+    throw new NOT_FOUND_ERROR('user', { user: user.id });
   }
   users[userIndex] = user;
   return user;

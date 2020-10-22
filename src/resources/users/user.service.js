@@ -1,5 +1,5 @@
 const tasksService = require('../tasks/task.service');
-const usersRepo = require('./user.memory.repository');
+const usersRepo = require('./user.mongo.repository');
 const User = require('./user.model');
 const BAD_REQUEST_ERROR = require('../../errors/400');
 
