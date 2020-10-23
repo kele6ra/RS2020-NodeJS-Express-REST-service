@@ -1,5 +1,5 @@
 const { Board } = require('./board.model');
-const { NOT_FOUND_ERROR } = require('../../errors/404');
+const NOT_FOUND_ERROR = require('../../errors/404');
 
 const addBoard = board => Board.create(board);
 

@@ -13,6 +13,20 @@ const Task = new Schema(
   { collection: 'tasks' }
 );
 
+const toResponse = task => {
+  const { _id, title, order, description, userId, boardId, columnId } = task;
+  return {
+    id: _id,
+    title,
+    order: Number(order),
+    description,
+    userId,
+    boardId,
+    columnId
+  };
+};
+
 module.exports = {
-  Task: mongoose.model('tasks', Task)
+  Task: mongoose.model('tasks', Task),
+  toResponse
 };

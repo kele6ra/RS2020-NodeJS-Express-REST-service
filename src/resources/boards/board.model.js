@@ -6,7 +6,7 @@ const Board = new Schema(
     title: String,
     columns: [
       {
-        id: { type: mongoose.ObjectId, default: null },
+        _id: { type: mongoose.ObjectId, default: mongoose.Types.ObjectId() },
         title: String,
         order: String
       }
@@ -15,6 +15,20 @@ const Board = new Schema(
   { collection: 'boards' }
 );
 
+const toResponse = baord => {
+  const { _id, title, columns } = baord;
+  return {
+    id: _id,
+    title,
+    columns: columns.map(e => ({
+      id: _id,
+      title: e.title,
+      order: Number(e.order)
+    }))
+  };
+};
+
 module.exports = {
-  Board: mongoose.model('boards', Board)
+  Board: mongoose.model('boards', Board),
+  toResponse
 };

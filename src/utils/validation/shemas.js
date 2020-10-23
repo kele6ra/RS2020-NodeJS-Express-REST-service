@@ -25,11 +25,9 @@ const schemas = {
       .allow(null),
     boardId: Joi.string()
       .regex(/^[0-9a-fA-F]{24}$/)
-      .allow(null)
-      .required(),
+      .allow(null),
     columnId: Joi.string()
       .regex(/^[0-9a-fA-F]{24}$/)
-      .required()
       .allow(null)
   }).options({ abortEarly: true, allowUnknown: true }),
   boardBody: Joi.object({

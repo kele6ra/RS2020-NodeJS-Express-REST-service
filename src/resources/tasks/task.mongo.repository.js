@@ -1,5 +1,5 @@
 const { Task } = require('./task.model');
-const { NOT_FOUND_ERROR } = require('../../errors/404');
+const NOT_FOUND_ERROR = require('../../errors/404');
 
 const addTask = task => Task.create(task);
 

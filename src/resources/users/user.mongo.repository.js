@@ -1,5 +1,5 @@
 const { User } = require('./user.model');
-const { NOT_FOUND_ERROR } = require('../../errors/404');
+const NOT_FOUND_ERROR = require('../../errors/404');
 
 const getAll = () => User.find({});
 
