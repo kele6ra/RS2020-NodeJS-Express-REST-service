@@ -1,6 +1,6 @@
 const tasksRepo = require('./task.mongo.repository');
 
-const addTask = (taskData, boardId) => tasksRepo.addTask(taskData, boardId);
+const addTask = (boardId, task) => tasksRepo.addTask({ ...task, boardId });
 
 const deleteBoardTasks = boardId => tasksRepo.deleteBoardTasks(boardId);
 

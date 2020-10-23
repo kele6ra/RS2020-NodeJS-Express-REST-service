@@ -8,6 +8,7 @@ const deleteBoard = async boardId => {
   if (!board) {
     throw new NOT_FOUND_ERROR('user', { boardId });
   }
+  return board;
 };
 
 const getAll = () => Board.find({});

@@ -6,7 +6,7 @@ const addTask = task => Task.create(task);
 const deleteBoardTasks = boardId => Task.deleteMany({ boardId });
 
 const deleteTask = async (boardId, taskId) => {
-  const task = Task.findOneAndDelete({ _id: taskId, boardId });
+  const task = await Task.findOneAndDelete({ _id: taskId, boardId });
   if (!task) {
     throw new NOT_FOUND_ERROR('task', { taskId });
   }

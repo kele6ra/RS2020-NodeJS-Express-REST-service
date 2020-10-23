@@ -11,7 +11,8 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', validator(taskBody, 'body'), async (req, res) => {
-  const task = await tasksService.addTask(req.body, req.params.id);
+  const task = await tasksService.addTask(req.params.id, req.body);
+
   res.status(OK).json(toResponse(task));
 });
 

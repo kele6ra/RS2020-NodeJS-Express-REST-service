@@ -13,8 +13,8 @@ const getUser = async userId => {
   return user;
 };
 
-const deleteUser = userId => {
-  const user = User.findOneAndDelete({ _id: userId });
+const deleteUser = async userId => {
+  const user = await User.findOneAndDelete({ _id: userId });
   if (!user) {
     throw new NOT_FOUND_ERROR('user', { userId });
   }
