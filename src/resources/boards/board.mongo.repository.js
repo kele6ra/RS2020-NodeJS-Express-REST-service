@@ -1,37 +1,30 @@
-const NOT_FOUND_ERROR = require('../../errors/404');
-const boards = [];
+const { Board } = require('./board.model');
+const { NOT_FOUND_ERROR } = require('../../errors/404');
 
-const addBoard = board => {
-  boards.push(board);
+const addBoard = board => Board.create(board);
+
+const deleteBoard = async boardId => {
+  const board = await Board.findOneAndDelete({ _id: boardId });
+  if (!board) {
+    throw new NOT_FOUND_ERROR('user', { boardId });
+  }
+};
+
+const getAll = () => Board.find({});
+
+const getBoard = async boardId => {
+  const board = await Board.findOne({ _id: boardId });
+  if (!board) {
+    throw new NOT_FOUND_ERROR('user', { boardId });
+  }
   return board;
 };
 
-const deleteBoard = boardId => {
-  const boardIndex = boards.findIndex(e => e.id === boardId);
-  if (boardIndex === -1) {
-    throw new NOT_FOUND_ERROR('board', { boardId });
+const updateBoard = async (boardId, boardData) => {
+  const board = await Board.findOneAndUpdate({ _id: boardId }, boardData);
+  if (!board) {
+    throw new NOT_FOUND_ERROR('user', { boardId });
   }
-  boards.splice(boardIndex, 1);
-};
-
-const getAll = () => {
-  return boards.filter(e => e);
-};
-
-const getBoard = boardId => {
-  const boardIndex = boards.findIndex(e => e.id === boardId);
-  if (boardIndex === -1) {
-    throw new NOT_FOUND_ERROR('board', { boardId });
-  }
-  return boards[boardIndex];
-};
-
-const updateBoard = board => {
-  const boardIndex = boards.findIndex(e => e.id === board.id);
-  if (boardIndex === -1) {
-    throw new NOT_FOUND_ERROR('board', { board: board.id });
-  }
-  boards[boardIndex] = board;
   return board;
 };
 

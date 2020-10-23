@@ -2,14 +2,12 @@ const usersRepo = require('./user.mongo.repository');
 
 const getAll = () => usersRepo.getAll();
 
-const getUser = id => usersRepo.get(id);
+const getUser = id => usersRepo.getUser(id);
 
-const deleteUser = id => usersRepo.remove(id);
+const deleteUser = id => usersRepo.deleteUser(id);
 
-const addUser = user => {
-  return usersRepo.save(user);
-};
+const addUser = user => usersRepo.addUser(user);
 
-const updateUser = (id, user) => usersRepo.update(id, user);
+const updateUser = (id, user) => usersRepo.updateUser(id, user);
 
 module.exports = { getAll, getUser, deleteUser, addUser, updateUser };

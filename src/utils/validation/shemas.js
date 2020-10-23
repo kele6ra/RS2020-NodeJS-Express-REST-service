@@ -1,5 +1,4 @@
 const Joi = require('joi');
-const UUID_VERSION = 'uuidv4';
 
 const schemas = {
   taskId: Joi.object({
@@ -29,7 +28,7 @@ const schemas = {
       .allow(null)
       .required(),
     columnId: Joi.string()
-      .guid({ version: UUID_VERSION })
+      .regex(/^[0-9a-fA-F]{24}$/)
       .required()
       .allow(null)
   }).options({ abortEarly: true, allowUnknown: true }),

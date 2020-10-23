@@ -1,51 +1,35 @@
-const NOT_FOUND_ERROR = require('../../errors/404');
-let tasks = [];
+const { Task } = require('./task.model');
+const { NOT_FOUND_ERROR } = require('../../errors/404');
 
-const addTask = task => {
-  tasks.push(task);
+const addTask = task => Task.create(task);
+
+const deleteBoardTasks = boardId => Task.deleteMany({ boardId });
+
+const deleteTask = async (boardId, taskId) => {
+  const task = Task.findOneAndDelete({ _id: taskId, boardId });
+  if (!task) {
+    throw new NOT_FOUND_ERROR('task', { taskId });
+  }
+};
+
+const getBoardTasks = boardId => Task.find({ boardId });
+
+const getTask = async (boardId, taskId) => {
+  const task = await Task.findOne({ _id: taskId, boardId });
+  if (!task) {
+    throw new NOT_FOUND_ERROR('task', { taskId });
+  }
   return task;
 };
 
-const deleteBoardTasks = boardId => {
-  tasks = tasks.filter(e => e.boardId !== boardId);
-};
+const unassignUserTasks = userId =>
+  Task.updateMany({ userId }, { userId: null });
 
-const deleteTask = (boardId, taskId) => {
-  const taskIndex = tasks.findIndex(
-    e => e.boardId === boardId && e.id === taskId
-  );
-  if (taskIndex === -1) {
-    throw new NOT_FOUND_ERROR('task on board', { taskId, boardId });
+const updateTask = async (boardId, taskId, taskData) => {
+  const task = await Task.findOneAndUpdate({ _id: taskId, boardId }, taskData);
+  if (!task) {
+    throw new NOT_FOUND_ERROR('task', { taskId });
   }
-  tasks.splice(taskIndex, 1);
-};
-
-const getBoardTasks = boardId => tasks.filter(e => e.boardId === boardId);
-
-const getTask = async (boardId, taskId) => {
-  const taskIndex = tasks.findIndex(
-    e => e.boardId === boardId && e.id === taskId
-  );
-  if (taskIndex === -1) {
-    throw new NOT_FOUND_ERROR('task on board', { taskId, boardId });
-  }
-  return tasks[taskIndex];
-};
-
-const unassignUserTasks = userId => {
-  tasks.forEach(e => {
-    if (e.userId === userId) e.userId = null;
-  });
-};
-
-const updateTask = (boardId, task) => {
-  const taskIndex = tasks.findIndex(
-    e => e.boardId === boardId && e.id === task.id
-  );
-  if (taskIndex === -1) {
-    throw new NOT_FOUND_ERROR('task on board', { task: task.id, boardId });
-  }
-  tasks[taskIndex] = task;
   return task;
 };
 
