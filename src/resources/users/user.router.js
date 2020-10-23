@@ -1,23 +1,23 @@
 const router = require('express').Router();
-const User = require('./user.model');
-const { OK, NO_CONTENT } = require('http-status-codes');
 const usersService = require('./user.service');
+const { OK, NO_CONTENT } = require('http-status-codes');
+const { toResponse } = require('./user.model');
 const { id, userBody } = require('../../utils/validation/shemas');
 const validator = require('../../utils/validation/validator');
 
 router.get('/', async (req, res) => {
   const users = await usersService.getAll();
-  await res.status(OK).json(users.map(User.getResponse));
+  await res.status(OK).json(users.map(toResponse));
 });
 
 router.post('/', validator(userBody, 'body'), async (req, res) => {
   const user = await usersService.addUser(req.body);
-  res.status(OK).send(User.getResponse(user));
+  res.status(OK).send(toResponse(user));
 });
 
 router.get('/:id', validator(id, 'params'), async (req, res) => {
   const user = await usersService.getUser(req.params.id);
-  res.status(OK).send(User.getResponse(user));
+  res.status(OK).send(toResponse(user));
 });
 
 router.delete('/:id', validator(id, 'params'), async (req, res) => {
@@ -30,8 +30,8 @@ router.put(
   validator(id, 'params'),
   validator(userBody, 'body'),
   async (req, res) => {
-    const user = await usersService.updateUser(req.body, req.params.id);
-    res.status(OK).send(User.getResponse(user));
+    const user = await usersService.updateUser(req.params.id, req.body);
+    res.status(OK).send(toResponse(user));
   }
 );
 

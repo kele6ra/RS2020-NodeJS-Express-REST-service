@@ -4,15 +4,15 @@ const UUID_VERSION = 'uuidv4';
 const schemas = {
   taskId: Joi.object({
     id: Joi.string()
-      .guid({ version: UUID_VERSION })
+      .regex(/^[0-9a-fA-F]{24}$/)
       .required(),
     taskId: Joi.string()
-      .guid({ version: UUID_VERSION })
+      .regex(/^[0-9a-fA-F]{24}$/)
       .required()
   }),
   id: Joi.object({
     id: Joi.string()
-      .guid({ version: UUID_VERSION })
+      .regex(/^[0-9a-fA-F]{24}$/)
       .required()
   }),
   taskBody: Joi.object({
@@ -22,14 +22,15 @@ const schemas = {
       .required(),
     description: Joi.string().allow(null),
     userId: Joi.string()
-      .guid({ version: UUID_VERSION })
+      .regex(/^[0-9a-fA-F]{24}$/)
       .allow(null),
     boardId: Joi.string()
-      .guid({ version: UUID_VERSION })
+      .regex(/^[0-9a-fA-F]{24}$/)
       .allow(null)
       .required(),
     columnId: Joi.string()
       .guid({ version: UUID_VERSION })
+      .required()
       .allow(null)
   }).options({ abortEarly: true, allowUnknown: true }),
   boardBody: Joi.object({
