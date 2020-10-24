@@ -22,7 +22,9 @@ const getBoard = async boardId => {
 };
 
 const updateBoard = async (boardId, boardData) => {
-  const board = await Board.findOneAndUpdate({ _id: boardId }, boardData);
+  const board = await Board.findOneAndUpdate({ _id: boardId }, boardData, {
+    new: true
+  });
   if (!board) {
     throw new NOT_FOUND_ERROR('user', { boardId });
   }

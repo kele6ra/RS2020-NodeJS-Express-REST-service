@@ -21,7 +21,9 @@ const deleteUser = async userId => {
 };
 
 const updateUser = async (userId, userData) => {
-  const user = await User.findOneAndUpdate({ _id: userId }, userData);
+  const user = await User.findOneAndUpdate({ _id: userId }, userData, {
+    new: true
+  });
   if (!user) {
     throw new NOT_FOUND_ERROR('user', { userId });
   }

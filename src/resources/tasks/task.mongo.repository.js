@@ -26,7 +26,9 @@ const unassignUserTasks = userId =>
   Task.updateMany({ userId }, { userId: null });
 
 const updateTask = async (boardId, taskId, taskData) => {
-  const task = await Task.findOneAndUpdate({ _id: taskId, boardId }, taskData);
+  const task = await Task.findOneAndUpdate({ _id: taskId, boardId }, taskData, {
+    new: true
+  });
   if (!task) {
     throw new NOT_FOUND_ERROR('task', { taskId });
   }
