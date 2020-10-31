@@ -4,9 +4,13 @@ const UNAUTHORIZED_ERROR = require('../errors/401');
 
 const checkToken = (req, res, next) => {
   try {
-    jwt.verify(req.headers.authorization.split(' ')[1], JWT_SECRET_KEY);
-  } catch (err) {
-    throw new UNAUTHORIZED_ERROR('Invaild token');
+    const authorization = req.headers.authorization;
+    if (!authorization) throw 'Wrong token';
+    const [type, token] = authorization.split(' ');
+    if (type !== 'Bearer') throw 'Wrong token';
+    jwt.verify(token, JWT_SECRET_KEY);
+  } catch {
+    throw new UNAUTHORIZED_ERROR('Wrong token');
   }
   next();
 };
