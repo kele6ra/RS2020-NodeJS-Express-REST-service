@@ -1,9 +1,9 @@
 const userService = require('../users/user.service');
 const UNAUTHORIZED_ERROR = require('../../errors/401');
 const FORBIDDEN_ERROR = require('../../errors/403');
-const notFoundError = require('../../errors/404');
 const token = require('../../utils/token');
 const bcrypt = require('bcrypt');
+const logger = require('../../common/logging');
 
 const verifyLogin = async credentials => {
   try {
@@ -14,10 +14,8 @@ const verifyLogin = async credentials => {
     }
     return token.newToken(user);
   } catch (e) {
-    if (e instanceof notFoundError) {
-      throw new FORBIDDEN_ERROR('User is not found!');
-    }
-    throw e;
+    logger.error(e.message);
+    throw new FORBIDDEN_ERROR('User or password is wrong!');
   }
 };
 
