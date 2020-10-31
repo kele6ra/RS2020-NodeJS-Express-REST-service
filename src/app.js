@@ -10,9 +10,11 @@ const cors = require('cors');
 require('express-async-errors');
 
 const winston = require('./common/logging');
+const token = require('./utils/token');
 const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
 const taskRouter = require('./resources/tasks/task.router');
+const loginRouter = require('./resources/login/login.router');
 const errorHandler = require('./errors/handler');
 
 const app = express();
@@ -42,6 +44,8 @@ app.use(
 
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
+app.use('/login', loginRouter);
+app.use(token.checkToken);
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 boardRouter.use('/:id/tasks', taskRouter);

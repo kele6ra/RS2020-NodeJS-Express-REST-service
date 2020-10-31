@@ -13,6 +13,14 @@ const getUser = async userId => {
   return user;
 };
 
+const getUserByLogin = async login => {
+  const user = await User.findOne({ login });
+  if (!user) {
+    throw new NOT_FOUND_ERROR('user', { login });
+  }
+  return user;
+};
+
 const deleteUser = async userId => {
   const user = await User.findOneAndDelete({ _id: userId });
   if (!user) {
@@ -30,4 +38,11 @@ const updateUser = async (userId, userData) => {
   return user;
 };
 
-module.exports = { getAll, addUser, getUser, deleteUser, updateUser };
+module.exports = {
+  getAll,
+  addUser,
+  getUser,
+  getUserByLogin,
+  deleteUser,
+  updateUser
+};
