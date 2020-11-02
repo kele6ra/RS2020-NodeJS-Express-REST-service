@@ -33,6 +33,8 @@ app.use('/', (req, res, next) => {
   next();
 });
 
+app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+
 app.use(
   morgan(
     ':method :status :url :query Body :body size :res[content-length] - :response-time ms',
@@ -41,8 +43,6 @@ app.use(
     }
   )
 );
-
-app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use('/login', loginRouter);
 app.use(token.checkToken);

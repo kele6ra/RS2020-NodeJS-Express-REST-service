@@ -20,11 +20,13 @@ const addUser = async user => {
 };
 
 const updateUser = async (id, user) => {
-  const hash = await bcrypt.hash(user.password, SALT_ROUNDS);
-  const updatedUser = await usersRepo.updateUser(id, {
-    ...user,
-    password: hash
-  });
+  if ('password' in user) {
+    user = {
+      ...user,
+      password: await bcrypt.hash(user.password, SALT_ROUNDS)
+    };
+  }
+  const updatedUser = await usersRepo.updateUser(id, user);
   return updatedUser;
 };
 
