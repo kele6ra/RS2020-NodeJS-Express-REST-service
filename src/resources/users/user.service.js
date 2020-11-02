@@ -19,7 +19,14 @@ const addUser = async user => {
   return await usersRepo.addUser({ ...user, password: hash });
 };
 
-const updateUser = (id, user) => usersRepo.updateUser(id, user);
+const updateUser = async (id, user) => {
+  const hash = await bcrypt.hash(user.password, SALT_ROUNDS);
+  const updatedUser = await usersRepo.updateUser(id, {
+    ...user,
+    password: hash
+  });
+  return updatedUser;
+};
 
 module.exports = {
   getAll,
